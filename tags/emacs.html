@@ -1,0 +1,444 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>emacs</title>
+    <link rel="stylesheet" href="../css/index-bundle.css" />
+    <meta charset="utf-8">
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="keywords" content="blog,programming,Haskell,Emacs,fish,bash">
+<meta property="og:title" content="Boris Buliga">
+<meta property="og:locale" content="es_US">
+<meta property="og:url" content="https://d12frosted.io">
+
+<link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
+<link rel="manifest" href="../site.webmanifest">
+
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+<script>
+  MathJax = {
+    svg: {
+      fontCache: 'global'
+    }
+  };
+</script>
+<script type="text/javascript" id="MathJax-script" async src="../library/mathjax/es5/tex-svg.js">
+</script>
+<script src="../library/chart.js/dist/Chart.min.js"></script>
+<script data-goatcounter="https://d12frosted.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
+    <meta name="description" content="emacs" />
+    <meta name="twitter:description" content="emacs">
+    <meta property="og:description" content="emacs">
+  </head>
+  <body>
+    <nav>
+  <ul>
+    <li><a class="fa fa-home" href="../" title="Home">&nbsp Home</a></li>
+    <li><a class="fa fa-suitcase" href="../projects.html" title="Projects">&nbsp Projects</a></li>
+    <li><a class="fa fa-rss" href="../atom.xml" title="RSS">&nbsp RSS</a></li>
+    <li><a class="fa fa-github" href="https://github.com/d12frosted" title="GitHub profile">&nbsp GitHub</a></li>
+  </ul>
+</nav>
+
+    <h1>Boris Buliga</h1>
+    <div class="info">
+      <p>I grow under the sun. When I am not writing code, I am either drinking wine or drinking tea (with these little cups). Cheese is my bread and tracking everything in Emacs is my cheese.</p>
+<p>P.S. d12frosted means dice with 12 sides from the Chessex™ frosted series. I used to play. Just a little bit.</p>
+    </div>
+    <h1>(tagged 'emacs)</h1>
+    <section>
+  
+    <div class="recent-post">
+      <h3><a href="../posts/2021-06-11-path-to-org-roam-v2.html">Path to org-roam v2</a></h3>
+      <div class="date"><span>June 11, 2021</span></div>
+      <div class="tags"><span>(<a title="All pages tagged 'emacs'." href="../tags/emacs.html">emacs</a>, <a title="All pages tagged 'org-roam'." href="../tags/org-roam.html">org-roam</a>)</span></div>
+      <div class="image-container-half post-image-split">
+<img src="../images/org-roam-logo.png" /><img src="../images/vulpea-logo.png" />
+</div>
+
+<p>In my opinion, <a href="https://github.com/org-roam/org-roam/">org-roam</a> is among the best things that happened to Emacs during the last 5 years. Forget Zettelkasten method, <code class="verbatim">org-roam</code> is a solution for non-hierarchical note-taking regardless of methodology you are worshiping. The most important and appealing feature of <code class="verbatim">org-roam</code> is its database! Just imagine, in less than a second I can filter a collection of 10000+ notes by tags, title, aliases, links and other things. This is what made my <a href="https://github.com/d12frosted/vino">wine tracking</a> solution usable with ever growing collection of tasting notes, and this is what I used to build various tools for presenting non-trivial views around my notes (<a href="https://github.com/d12frosted/environment/blob/master/emacs/README.org#managing-litnotes">example of a public one</a>).</p>
+<p>And now <code class="verbatim">org-roam</code> has <a href="https://github.com/org-roam/org-roam/releases/tag/v2.0.0">released</a> <code class="verbatim">V2</code>, the first major redesign affecting both users and authors of libraries extending <code class="verbatim">org-roam</code>. And while there are breaking changes requiring some effort from users, <code class="verbatim">V2</code> is so amazing and is so much more stable than <code class="verbatim">V1</code>, that my advice is to drop the chains of old <code class="verbatim">org-roam</code> and embrace all the goodness <code class="verbatim">V2</code> brings.</p>
+<p>Unfortunately, major redesign means lots of breaking changes and in this post I am going to describe my migration experience, code I used to migrate my notes and share some thoughts after migrating a code base comparable to <code class="verbatim">org-roam</code> itself. Of course, it touches my precious <a href="https://github.com/d12frosted/vulpea">vulpea</a> library (the fox image is its icon), so expect some advertisement™.</p>
+<p>NB. Migration process means adapting to and overcoming breaking changes. Since <code class="verbatim">V2</code> is full of them, this article might look pessimistic or depressing. But don’t get fooled, I think that <code class="verbatim">V2</code> is amazing. I am very happy to use it on a daily basis for several months and I never looked back. <a href="https://github.com/jethrokuan">Jethro</a> is doing amazing work! As well as all <a href="https://github.com/org-roam/org-roam/graphs/contributors">contributors</a> (with extra kudos to <a href="https://github.com/nobiot">Noboru Ota</a>, because Noboru rocks).</p>
+<p><strong>Change Log:</strong></p>
+<ul>
+<li><code>[2021-07-24 Sat]</code> Update post to reflect <a href="https://github.com/org-roam/org-roam/releases/tag/v2.0.0">release of org-roam v2</a>.</li>
+</ul>
+
+      <p class="read-more"><a href="../posts/2021-06-11-path-to-org-roam-v2.html">Read more →</a></p>
+    </div>
+  
+    <div class="recent-post">
+      <h3><a href="../posts/2021-05-21-task-management-with-roam-vol7.html">Task management with org-roam Vol. 7: Capture</a></h3>
+      <div class="date"><span>May 21, 2021</span></div>
+      <div class="tags"><span>(<a title="All pages tagged 'emacs'." href="../tags/emacs.html">emacs</a>, <a title="All pages tagged 'org-roam'." href="../tags/org-roam.html">org-roam</a>, <a title="All pages tagged 'org-mode'." href="../tags/org-mode.html">org-mode</a>)</span></div>
+      <p>Capturing is one of the most important activities in the task management process. Previously we talked about storing and querying tasks and now it’s time to cover capturing of tasks, meeting notes and inbox.</p>
+<p>Please note that the goal is not to discuss GTD or any other methodology, but rather to discover how org-roam combined with everything we talked previously may help you to improve your capturing process regardless of methodology you are using.</p>
+
+      <p class="read-more"><a href="../posts/2021-05-21-task-management-with-roam-vol7.html">Read more →</a></p>
+    </div>
+  
+    <div class="recent-post">
+      <h3><a href="../posts/2021-04-09-emacs-d.html">Towards future-safe emacs.d</a></h3>
+      <div class="date"><span>April  9, 2021</span></div>
+      <div class="tags"><span>(<a title="All pages tagged 'emacs'." href="../tags/emacs.html">emacs</a>)</span></div>
+      <p><strong>TL;DR</strong> This post describes an approach to make byte compiler and various linters happy and <strong>useful</strong> in your <code class="verbatim">.emacs.d</code>, while maintaining startup performance, the ability to write embedded packages and test them. This is going to be a long post, so grab a bottle of wine, snacks and follow me. In case you lack these things, just take a look at <a href="https://d12frosted.io/posts/2021-04-09-emacs-d.html#solution">results</a>.</p>
+<hr />
+
+<p>The longest project in my life is <a href="https://github.com/d12frosted/environment">environment</a>, it started with <a href="https://github.com/d12frosted/environment/tree/master/emacs">Emacs configurations</a> - personal frustration and my biggest time <del>waster</del> investment. I might be masochistic, but I never felt sorry for falling into this <del>trap</del> world. And boy, sometimes it is painful to maintain something in this ever-mutating and dynamic system.</p>
+<p>There are various tools to help maintaining Emacs package, all fall into one of four categories - project management tools (e.g. <a href="https://cask.readthedocs.io/en/latest/">Cask</a>, <a href="https://github.com/doublep/eldev/">doublep/eldev</a>, <a href="https://github.com/alphapapa/makem.sh">alphapapa/makem.sh</a>), compiler (e.g. built-in byte compiler), linters (e.g. <a href="https://github.com/purcell/package-lint">purcell/package-lint</a>, <a href="https://github.com/mattiase/relint">mattiase/relint</a>, <a href="https://github.com/gonewest818/elisp-lint/">gonewest818/elisp-lint</a>, <a href="https://github.com/emacs-elsa/Elsa">emacs-elsa/Elsa</a>) and test frameworks (e.g. <a href="https://www.gnu.org/software/emacs/manual/html_node/ert/index.html">ERT</a>, <a href="https://github.com/jorgenschaefer/emacs-buttercup">jorgenschaefer/emacs-buttercup</a>). The tricky part comes when you want to use them for maintaining your own Emacs configurations, as they have different requirements compared to regular Emacs packages. At least in my case, they do.</p>
+<p>First of all, I want Emacs to start as quickly as possible (e.g. in less than a second), meaning that I need to use tools like <code class="verbatim">use-package</code> for deferred loading. So I can’t <code class="verbatim">require</code> most of the packages directly except those that are used in the bootstrapping process. This easily makes compiler sad.</p>
+<p>Secondly, I have lots of additional functions extending or combining functionality of one or more packages. But I hate to define them inside <code class="verbatim">use-packge</code> macro. Aside from aesthetics, I want to retain functionality of <code class="verbatim">xref-find-definitions</code>. Having definitions outside of <code class="verbatim">use-package</code> means that I will get many false byte compiler warnings and errors. Which is not helpful!</p>
+<p>Thirdly, bootstrap process is different as project management tools isolate your package development from your Emacs configurations, which makes sense in general, but doesn’t make sense when you develop the aforementioned configurations.</p>
+<p>The closest approach I know about is <a href="https://github.com/hlissner/doom-emacs">hlissner/doom-emacs</a>, but even there <code class="verbatim">.emacs.d</code> is <a href="https://github.com/hlissner/doom-emacs/blob/46dedb3e3361535052d199e994b641dca2c2cffd/modules/lang/emacs-lisp/config.el#L14">ignored</a> by compiler. Let me just quote a docstring from there:</p>
+<blockquote>
+<p>This checker (flycheck) tends to produce a lot of false positives in your .emacs.d and private config, so it is mostly useless there. However, special hacks are employed so that flycheck still does <strong>some</strong> helpful linting.</p>
+</blockquote>
+<p>But it’s Emacs, right? Everything is possible! So let’s find a way to make byte compiler and linters helpful and enable testing of Emacs configurations.</p>
+<div class="post-image post-image-split">
+<img src="../images/emacs-d-1.png" /><img src="../images/emacs-d-2.png" />
+</div>
+
+
+      <p class="read-more"><a href="../posts/2021-04-09-emacs-d.html">Read more →</a></p>
+    </div>
+  
+    <div class="recent-post">
+      <h3><a href="../posts/2021-04-08-straight-el-retries.html">Retries with straight.el</a></h3>
+      <div class="date"><span>April  8, 2021</span></div>
+      <div class="tags"><span>(<a title="All pages tagged 'emacs'." href="../tags/emacs.html">emacs</a>)</span></div>
+      <p>We all know, network is unreliable. I love those moments when I decide to upgrade all my Emacs packages while connected via 3G. And since I am using <a href="https://github.com/raxod502/straight.el/">raxod502/straight.el</a>, the process requires to process each repository one by one. Now imagine my frustration, when due to unstable connection it fails on one of the repositories and I need to start the process again… from the beginning.</p>
+<p>So I say, no more, <a href="https://github.com/raxod502/straight.el/">raxod502/straight.el</a> should retry read operations over network! Unfortunately, there is no such option out of box (or at least I could not find it). Luckily, it’s Emacs!</p>
+
+      <p class="read-more"><a href="../posts/2021-04-08-straight-el-retries.html">Read more →</a></p>
+    </div>
+  
+    <div class="recent-post">
+      <h3><a href="../posts/2021-01-24-task-management-with-roam-vol6.html">Task management with org-roam Vol. 6: Select a person and view related tasks</a></h3>
+      <div class="date"><span>January 24, 2021</span></div>
+      <div class="tags"><span>(<a title="All pages tagged 'emacs'." href="../tags/emacs.html">emacs</a>, <a title="All pages tagged 'org-roam'." href="../tags/org-roam.html">org-roam</a>, <a title="All pages tagged 'org-mode'." href="../tags/org-mode.html">org-mode</a>)</span></div>
+      <p>In one of the previous articles (<a href="https://d12frosted.io/posts/2020-06-25-task-management-with-roam-vol3.html">Vol 3</a> to be precise) we talked about automatic setup of <code class="verbatim">filetags</code>, so each of the task in note related to a person is automatically tagged thanks to <a href="https://orgmode.org/manual/Tag-Inheritance.html">tag inheritance</a>. Then, in <a href="https://d12frosted.io/posts/2020-07-07-task-management-with-roam-vol4.html">Vol 4</a> we talked about automatic tagging of tasks whenever a person is mentioned either in the title or the body of some task. This all makes <code class="verbatim">org-agenda</code> <a href="https://orgmode.org/manual/Matching-tags-and-properties.html#Matching-tags-and-properties">matching capabilities</a> really useful for when we want to see the list of all tasks related to specific person.</p>
+<p>In this article, we are going to write a small utility function that asks user to select a person and then presents and <code class="verbatim">org-agenda</code> buffer with tasks related to selected person.</p>
+<p>Believe me, intro is longer than the content!</p>
+<div class="post-video">
+<video autoplay loop>
+  <source src="../images/org-notes-person-agenda.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+</div>
+
+<p><strong>Change Log:</strong></p>
+<ul>
+<li><code>[2021-03-02 Tue]</code>: Update naming convention to match <a href="https://github.com/d12frosted/environment/tree/master/emacs">personal configurations</a>.</li>
+<li><code>[2021-05-10 Mon]</code>: Update post to reflect changes in <a href="https://github.com/org-roam/org-roam/pull/1401">org-roam v2</a>. Previous version of this article is available on <a href="https://github.com/d12frosted/d12frosted.io/blob/c16870cab6ebbaafdf73c7c3589abbd27c20ac52/posts/2021-01-24-task-management-with-roam-vol6.org">GitHub</a>.</li>
+</ul>
+
+      <p class="read-more"><a href="../posts/2021-01-24-task-management-with-roam-vol6.html">Read more →</a></p>
+    </div>
+  
+    <div class="recent-post">
+      <h3><a href="../posts/2021-01-16-task-management-with-roam-vol5.html">Task management with org-roam Vol. 5: Dynamic and fast agenda</a></h3>
+      <div class="date"><span>January 16, 2021</span></div>
+      <div class="tags"><span>(<a title="All pages tagged 'emacs'." href="../tags/emacs.html">emacs</a>, <a title="All pages tagged 'org-roam'." href="../tags/org-roam.html">org-roam</a>, <a title="All pages tagged 'org-mode'." href="../tags/org-mode.html">org-mode</a>)</span></div>
+      <p>In previous articles (<a href="https://d12frosted.io/posts/2020-06-23-task-management-with-roam-vol1.html">Vol 1</a> and <a href="https://d12frosted.io/posts/2020-06-24-task-management-with-roam-vol2.html">Vol 2</a>) we talked about moving tasks from regular <code class="verbatim">org-mode</code> files to <code class="verbatim">org-roam</code> notes. This relied upon adding all <code class="verbatim">org-roam</code> files to <code class="verbatim">org-agenda-files</code>, which doesn’t scale well, as when you build an agenda buffer, it needs to traverse each file. Once you have more than 1k notes, things become sluggish.</p>
+<p>In my experience, once I reached 1200 note files, <code class="verbatim">org-agenda</code> constantly took more than 50 seconds to build, rendering this tool completely useless. But then I realised that only 3% of those files actually contain any <code class="verbatim">TODO</code> entries, so there is no need to traverse whole <code class="verbatim">org-roam-directory</code>!</p>
+<p>In this article we are going to optimise <code class="verbatim">org-agenda</code> back to less than 1 second by dynamically building <code class="verbatim">org-agenda-files</code> list to include only files with <code class="verbatim">TODO</code> entries. All thanks to the power of <code class="verbatim">org-roam</code> and some hooks I am going to describe.</p>
+<p><strong>Change Log:</strong></p>
+<ul>
+<li><code>[2021-03-02 Tue]</code>: Update naming convention to match <a href="https://github.com/d12frosted/environment/tree/master/emacs">personal configurations</a>.</li>
+<li><code>[2021-03-08 Mon]</code>: <a href="https://github.com/Whil-">Gustav</a> shared that <code class="verbatim">org-element-map</code> has an optional parameter <code class="verbatim">first-match</code> that works like <code class="verbatim">seq-find</code>, meaning that <code class="verbatim">vulpea-project-p</code> can be optimised.</li>
+<li><code>[2021-05-10 Mon]</code>: Update post to reflect changes in <a href="https://github.com/org-roam/org-roam/pull/1401">org-roam v2</a>. Previous version of this article is available on <a href="https://github.com/d12frosted/d12frosted.io/blob/c16870cab6ebbaafdf73c7c3589abbd27c20ac52/posts/2021-01-16-task-management-with-roam-vol5.org">GitHub</a>.</li>
+<li><code>[2021-08-19 Thu]</code>: <a href="https://github.com/Whil-">Gustav</a> proposed to modify buffer only when tags have changed. Code was updated accordingly (both in the post and on <a href="https://gist.github.com/d12frosted/a60e8ccb9aceba031af243dff0d19b2e">GitHub Gist</a>).</li>
+</ul>
+
+      <p class="read-more"><a href="../posts/2021-01-16-task-management-with-roam-vol5.html">Read more →</a></p>
+    </div>
+  
+    <div class="recent-post">
+      <h3><a href="../posts/2020-07-07-task-management-with-roam-vol4.html">Task management with org-roam Vol. 4: Automatic tagging</a></h3>
+      <div class="date"><span>July  7, 2020</span></div>
+      <div class="tags"><span>(<a title="All pages tagged 'emacs'." href="../tags/emacs.html">emacs</a>, <a title="All pages tagged 'org-roam'." href="../tags/org-roam.html">org-roam</a>, <a title="All pages tagged 'org-mode'." href="../tags/org-mode.html">org-mode</a>)</span></div>
+      <p>In the <a href="https://d12frosted.io/posts/2020-06-25-task-management-with-roam-vol3.html">previous article</a> we covered automatic tagging of notes related to a specific person, and today we are going to cover automatic tagging of an org-mode heading upon insertion of link related to a person. To put it simple, when I mention someone in the task, I would love this task to be automatically tagged with that persons name. As they say, it’s better to see once, than imagine multiple times, so here is a screencast.</p>
+<div class="post-image">
+<img src="../images/org-notes-insert.gif" />
+</div>
+
+<p><strong>Change Log:</strong></p>
+<ul>
+<li><code>[2021-01-24 Sun]</code>: Since some of the functionality mentioned in the original article was merged to <code class="verbatim">org-roam</code>, all code is updated to reflect the current state of affairs.</li>
+<li><code>[2021-03-02 Tue]</code>: Update naming convention to match <a href="https://github.com/d12frosted/environment/tree/master/emacs">personal configurations</a>.</li>
+<li><code>[2021-05-10 Mon]</code>: Update post to reflect changes in <a href="https://github.com/org-roam/org-roam/pull/1401">org-roam v2</a>. Previous version of this article is available on <a href="https://github.com/d12frosted/d12frosted.io/blob/c16870cab6ebbaafdf73c7c3589abbd27c20ac52/posts/2020-07-07-task-management-with-roam-vol4.org">GitHub</a>.</li>
+</ul>
+
+      <p class="read-more"><a href="../posts/2020-07-07-task-management-with-roam-vol4.html">Read more →</a></p>
+    </div>
+  
+    <div class="recent-post">
+      <h3><a href="../posts/2020-06-25-task-management-with-roam-vol3.html">Task management with org-roam Vol. 3: FILETAGS</a></h3>
+      <div class="date"><span>June 25, 2020</span></div>
+      <div class="tags"><span>(<a title="All pages tagged 'emacs'." href="../tags/emacs.html">emacs</a>, <a title="All pages tagged 'org-roam'." href="../tags/org-roam.html">org-roam</a>, <a title="All pages tagged 'org-mode'." href="../tags/org-mode.html">org-mode</a>)</span></div>
+      <p>In the previous articles (<a href="https://d12frosted.io/posts/2020-06-23-task-management-with-roam-vol1.html">vol1</a> and <a href="https://d12frosted.io/posts/2020-06-24-task-management-with-roam-vol2.html">vol2</a>) we walked the path to <a href="https://github.com/org-roam/org-roam">org-roam</a> and solved the issue with garbage in the category column of agenda. Today we are going to explore meta projects dedicated to specific person, tag inheritance and moving such projects to separate <code class="verbatim">org-roam</code> files. As result, we will have code for automatic tagging based on the title.</p>
+<p>Aside from regular meta projects (like personal blog) I also create meta projects for people and locations. This is helpful, because some of the tasks are really related to someone specifically. For example, when I need to return a borrowed book, I just create a task for this.</p>
+<pre class="org"><code>* Frodo Baggins                                               :@FrodoBaggins:
+
+** TODO Return 'The Lord of the Rings' book
+
+** TODO Farewell party                                             :PROJECT:
+
+It feels like Mr. Frodo is about to live Shire. So we are going to setup a
+farewell party for him.
+
+*** TODO Talk to Samwise Gamgee                            :@SamwiseGamgee:
+
+*** TODO Talk to Meriadoc Brandybuck                  :@MeriadocBrandybuck:
+
+*** TODO Talk to Peregrin Took                              :@PeregrinTook:
+
+*** TODO Tie a pair of wool socks
+
+I am not sure where he is going, so a pair of warm wool socks should be good.
+At least they can be used to protect bottles of wine during journey. That is in
+case Frodo doesn't wear socks. But how could it be? Everyone does!
+</code></pre>
+<p><strong>Change Log:</strong></p>
+<ul>
+<li><code>[2021-01-24 Sun]</code>: Since some of the functionality mentioned in the original article was merged to <code class="verbatim">org-roam</code>, all code is updated to reflect the current state of affairs.</li>
+<li><code>[2021-03-02 Tue]</code>: Update naming convention to match <a href="https://github.com/d12frosted/environment/tree/master/emacs">personal configurations</a>.</li>
+<li><code>[2021-05-10 Mon]</code>: Update post to reflect changes in <a href="https://github.com/org-roam/org-roam/pull/1401">org-roam v2</a>. Previous version of this article is available on <a href="https://github.com/d12frosted/d12frosted.io/blob/c16870cab6ebbaafdf73c7c3589abbd27c20ac52/posts/2020-06-25-task-management-with-roam-vol3.org">GitHub</a>.</li>
+</ul>
+
+      <p class="read-more"><a href="../posts/2020-06-25-task-management-with-roam-vol3.html">Read more →</a></p>
+    </div>
+  
+    <div class="recent-post">
+      <h3><a href="../posts/2020-06-24-task-management-with-roam-vol2.html">Task management with org-roam Vol. 2: Categories</a></h3>
+      <div class="date"><span>June 24, 2020</span></div>
+      <div class="tags"><span>(<a title="All pages tagged 'emacs'." href="../tags/emacs.html">emacs</a>, <a title="All pages tagged 'org-roam'." href="../tags/org-roam.html">org-roam</a>, <a title="All pages tagged 'org-mode'." href="../tags/org-mode.html">org-mode</a>)</span></div>
+      <p>In the <a href="https://d12frosted.io/posts/2020-06-23-task-management-with-roam-vol1.html">previous article</a> we set a ground for moving tasks to <a href="https://github.com/org-roam/org-roam">org-roam</a>, and encountered an issue with visual garbage in the agenda buffer. Namely, <code class="verbatim">org-roam</code> file id as part of the category. In this article, we are going to explore the means to overcome this issue.</p>
+<div class="post-image post-image-split">
+<img src="../images/org-roam-task-management-vol2-1.png" /><img src="../images/org-roam-task-management-vol2-2.png" />
+</div>
+
+<p><strong>Change Log:</strong></p>
+<ul>
+<li><code>[2021-03-02 Tue]</code>: Update category extraction function to use <code class="verbatim">TITLE</code> of the note and enforce length limit. Kudos to <a href="https://github.com/real-or-random/">Tim Ruffing</a> for the idea.</li>
+<li><code>[2021-03-02 Tue]</code>: Update naming convention to match <a href="https://github.com/d12frosted/environment/tree/master/emacs">personal configurations</a>.</li>
+<li><code>[2021-05-10 Mon]</code>: Update post to reflect changes in <a href="https://github.com/org-roam/org-roam/pull/1401">org-roam v2</a>. Previous version of this article is available on <a href="https://github.com/d12frosted/d12frosted.io/blob/c16870cab6ebbaafdf73c7c3589abbd27c20ac52/posts/2020-06-24-task-management-with-roam-vol2.org">GitHub</a>.</li>
+</ul>
+
+      <p class="read-more"><a href="../posts/2020-06-24-task-management-with-roam-vol2.html">Read more →</a></p>
+    </div>
+  
+    <div class="recent-post">
+      <h3><a href="../posts/2020-06-23-task-management-with-roam-vol1.html">Task management with org-roam Vol. 1: Path to Roam</a></h3>
+      <div class="date"><span>June 23, 2020</span></div>
+      <div class="tags"><span>(<a title="All pages tagged 'emacs'." href="../tags/emacs.html">emacs</a>, <a title="All pages tagged 'org-roam'." href="../tags/org-roam.html">org-roam</a>, <a title="All pages tagged 'org-mode'." href="../tags/org-mode.html">org-mode</a>)</span></div>
+      <p><a href="https://orgmode.org">org-mode</a> is a simple outliner for note taking and list management. It <a href="https://d12frosted.io/posts/2016-12-20-Being-an-org-mode-addict.html">doesn’t impose</a> any complex features on users. This is something users excel at by themselves. My suggestion is to continue this tradition and discover task management capabilities in <a href="https://github.com/org-roam/org-roam">org-roam</a>, an <a href="https://orgmode.org">org-mode</a> extension for non-hierarchical notes management.</p>
+<div class="post-image">
+<img src="../images/org-roam-task-management-vol1-3.png" />
+</div>
+
+<p><strong>Change Log:</strong></p>
+<ul>
+<li><code>[2021-05-10 Mon]</code>: Update post to reflect changes in <a href="https://github.com/org-roam/org-roam/pull/1401">org-roam v2</a>. Previous version of this article is available on <a href="https://github.com/d12frosted/d12frosted.io/blob/c16870cab6ebbaafdf73c7c3589abbd27c20ac52/posts/2020-06-23-task-management-with-roam-vol1.org">GitHub</a>.</li>
+</ul>
+
+      <p class="read-more"><a href="../posts/2020-06-23-task-management-with-roam-vol1.html">Read more →</a></p>
+    </div>
+  
+    <div class="recent-post">
+      <h3><a href="../posts/2020-06-10-org-roam-tags.html">Org-roam tags</a></h3>
+      <div class="date"><span>June 10, 2020</span></div>
+      <div class="tags"><span>(<a title="All pages tagged 'emacs'." href="../tags/emacs.html">emacs</a>, <a title="All pages tagged 'org-roam'." href="../tags/org-roam.html">org-roam</a>)</span></div>
+      <p><a href="https://github.com/org-roam/org-roam">Org-roam</a> is a note-taking tool built on top of Emacs and Org. Essentially, it’s a replica of <a href="https://roamresearch.com">Roam Research</a>. These tools provide an easy way to create and manage non-hierarchical notes. If you wish to learn more, just take a look at the <a href="https://org-roam.github.io/org-roam/manual/">Org-roam manual</a> or watch <a href="https://www.youtube.com/watch?v=Lg61ocfxk3c">Making Connections in your Notes</a> video by Matt Williams. Believe me, Org-roam and Roam Research are game-changers. Or even better, don’t believe me and validate my claim by yourself.</p>
+<p>Since I am already <a href="https://d12frosted.io/posts/2016-12-20-Being-an-org-mode-addict.html">addicted</a>, it was only natural to prefer <code class="verbatim">org-roam</code> over some web application. Apart from being developed on top of mature Org ecosystem, Emacs brings many merits and extensibility is one of them. Once <code class="verbatim">org-roam</code> introduced tags system in <a href="https://github.com/org-roam/org-roam/blob/master/CHANGELOG.md#111-18-05-2020">v1.1.1</a> I felt the lack of functions to manage them. Adding and removing them by hand is not nice. So in this article I am sharing a snippet that I’ve forged to ease the unbearable lightness of being.</p>
+<p><strong>Change Log:</strong></p>
+<ul>
+<li><code>[2020-10-12 Mon]</code>: Functionality described in this post (and similar functionality to manage aliases) is <a href="https://github.com/org-roam/org-roam/pull/1183">merged to the upstream</a>. Now simply use one of the following functions:
+<ul>
+<li><code class="verbatim">org-roam-tag-add</code></li>
+<li><code class="verbatim">org-roam-tag-delete</code></li>
+<li><code class="verbatim">org-roam-alias-add</code></li>
+<li><code class="verbatim">org-roam-alias-delete</code></li>
+</ul></li>
+<li><code>[2021-07-31 Sat]</code>: With <a href="https://github.com/org-roam/org-roam/releases/tag/v2.0.0">release of org-roam v2</a> you should use the following functions:
+<ul>
+<li><code class="verbatim">org-roam-tag-add</code></li>
+<li><code class="verbatim">org-roam-tag-remove</code></li>
+<li><code class="verbatim">org-roam-alias-add</code></li>
+<li><code class="verbatim">org-roam-alias-remove</code></li>
+</ul></li>
+</ul>
+
+      <p class="read-more"><a href="../posts/2020-06-10-org-roam-tags.html">Read more →</a></p>
+    </div>
+  
+    <div class="recent-post">
+      <h3><a href="../posts/2020-06-04-beginning-of-line.html">Emacs: moving to beginning of line</a></h3>
+      <div class="date"><span>June  4, 2020</span></div>
+      <div class="tags"><span>(<a title="All pages tagged 'emacs'." href="../tags/emacs.html">emacs</a>)</span></div>
+      <p>In stocks Emacs there is a function <code class="verbatim">move-to-beginning-of-line</code> which is bound to <code class="verbatim">C-a</code> by default. It does exactly what its name implies - moves the cursor to the beginning of line. In case of indented code this is usually not what I want, but instead I would love to move the first visible character of line.</p>
+<div class="post-image post-image-half">
+<img src="../images/beginning-of-line-haskell.gif" />
+</div>
+
+<p>There are packages that does this and even more (for example, <a href="https://github.com/alezost/mwim.el">mwim</a>), but if for some reason you don’t want to add one more package to your dependencies, or you care only about moving to the beginning of line, then you might grab the code that I share in the details. There is a version that also knows how to work with org mode headers and lists.</p>
+<div class="post-image post-image-half">
+<img src="../images/beginning-of-line-org.gif" />
+</div>
+
+
+      <p class="read-more"><a href="../posts/2020-06-04-beginning-of-line.html">Read more →</a></p>
+    </div>
+  
+    <div class="recent-post">
+      <h3><a href="../posts/2020-01-08-emacs-plus-current-state.html">emacs-plus: current state</a></h3>
+      <div class="date"><span>January  8, 2020</span></div>
+      <div class="tags"><span>(<a title="All pages tagged 'emacs'." href="../tags/emacs.html">emacs</a>, <a title="All pages tagged 'emacs-plus'." href="../tags/emacs-plus.html">emacs-plus</a>)</span></div>
+      <p>Not everyone knows, but emacs-plus is almost an April Fool’s joke that was late for 1 day. Its <a href="https://github.com/d12frosted/homebrew-emacs-plus/commit/6c85ae34d2649512a3088207b5f2a81c23cd8630">initial release</a> was on 2nd April 2016 and the only feature it had compared to the official Emacs formula back in the day was Spacemacs icon (installed by default). Homebrew maintainers didn’t want to increase the complexity of the Emacs formula, so I’ve put that burden on myself, created a tap with one additional icon and after several years info command for <code class="verbatim">emacs-plus</code> prints a wall of options.</p>
+<p>I am very happy to see so many users of this feature-inclusive (and sometimes experimental) formula. I am grateful to all of you. I would’ve abandoned this project a year ago if it would not you! And I think it’s fair to (in)formally share the current state of the project and shed some light on my plans.</p>
+
+      <p class="read-more"><a href="../posts/2020-01-08-emacs-plus-current-state.html">Read more →</a></p>
+    </div>
+  
+    <div class="recent-post">
+      <h3><a href="../posts/2019-12-29-flyspell-correct-v0.6.html">flyspell-correct v0.6</a></h3>
+      <div class="date"><span>December 29, 2019</span></div>
+      <div class="tags"><span>(<a title="All pages tagged 'emacs'." href="../tags/emacs.html">emacs</a>, <a title="All pages tagged 'release'." href="../tags/release.html">release</a>, <a title="All pages tagged 'flyspell-correct'." href="../tags/flyspell-correct.html">flyspell-correct</a>)</span></div>
+      <p><code>flyspell-correct</code> is a package for distraction-free words correction with flyspell via selected interface. It’s available on <a href="https://github.com/d12frosted/flyspell-correct">GitHub</a> and <a href="http://melpa.org/#/flyspell-correct">MELPA</a>.</p>
+<p>Recently, there was a major release of <code>flyspell-correct</code>. Version 0.6 introduces new interface (<code class="verbatim">avy-menu</code>), fixes point movements, warnings, autoloads and switch to the lexical binding. Read further for the complete change list.</p>
+
+      <p class="read-more"><a href="../posts/2019-12-29-flyspell-correct-v0.6.html">Read more →</a></p>
+    </div>
+  
+    <div class="recent-post">
+      <h3><a href="../posts/2019-06-26-emacs-helpful.html">Emacs: reusing window for helpful buffers</a></h3>
+      <div class="date"><span>June 26, 2019</span></div>
+      <div class="tags"><span>(<a title="All pages tagged 'emacs'." href="../tags/emacs.html">emacs</a>, <a title="All pages tagged 'environment'." href="../tags/environment.html">environment</a>)</span></div>
+      <p>Ironically, I find the <a href="https://github.com/Wilfred/helpful">helpful</a> package quite helpful. It boosts Emacs <strong>help</strong> buffer with much more contextual information. If you haven’t tried it out yet, I advice you to do so.</p>
+<p>However, by default, it doesn’t play nicely with windows.</p>
+<p>Usually when I write some Elisp and I want to read the documentation of some function or variable, I hit <code>C-h f</code> or <code>C-h v</code> respectively and the help buffer is shown in the separate window. Which is convenient in my opinion, because I can see the code and the help.</p>
+<p>Sometimes help contains links to other entries that I need to navigate. And when I hit <code>&lt;RET&gt;</code> window containing code shows another help buffer. Which might be good for some people, but I hate this behaviour, because usually I want to see the code that I am editing.</p>
+<p>This is also annoying if you set the value of <code>helpful-max-buffers</code> to <code>1</code>. Help window and the window with code are swapped on every navigation.</p>
+<p>The good thing, it’s configurable (as almost everything in Emacs land).</p>
+<div class="sourceCode" id="cb1" data-org-language="emacs-lisp"><pre class="sourceCode commonlisp"><code class="sourceCode commonlisp"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>(<span class="kw">setq</span> helpful-switch-buffer-function #'+helpful-switch-to-buffer)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>(<span class="kw">defun</span><span class="fu"> +helpful-switch-to-buffer </span>(buffer-or-name)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Switch to helpful BUFFER-OR-NAME.</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="st">The logic is simple, if we are currently in the helpful buffer,</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="st">reuse it's window, otherwise create new one.&quot;</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  (<span class="kw">if</span> (<span class="kw">eq</span> major-mode 'helpful-mode)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>      (switch-to-buffer buffer-or-name)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    (pop-to-buffer buffer-or-name)))</span></code></pre></div>
+
+      <p class="read-more"><a href="../posts/2019-06-26-emacs-helpful.html">Read more →</a></p>
+    </div>
+  
+    <div class="recent-post">
+      <h3><a href="../posts/2018-10-14-equality-of-booleans-in-emacs.html">Equality of booleans in Emacs</a></h3>
+      <div class="date"><span>October 14, 2018</span></div>
+      <div class="tags"><span>(<a title="All pages tagged 'emacs'." href="../tags/emacs.html">emacs</a>)</span></div>
+      <div class="post-image post-image-half">
+<img src="../images/emacs-booleans.png" />
+</div>
+
+<p>There is a fun story about booleans in Emacs Lisp - there are no booleans in Emacs Lisp. Sort of. Because we have a symbol <code class="verbatim">nil</code>, which means an empty list. You can write it as <code class="verbatim">nil</code> or <code class="verbatim">()</code> - they both stand for the same object, the symbol <code class="verbatim">nil</code>.</p>
+<div class="sourceCode" id="cb1" data-org-language="emacs-lisp"><pre class="sourceCode commonlisp"><code class="sourceCode commonlisp"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>(<span class="kw">eq</span> <span class="kw">nil</span> ())                             <span class="co">; =&gt; t</span></span></code></pre></div>
+<p>Since LISP is all about list processing, empty list is something very <code class="verbatim">false</code>. So <code class="verbatim">false</code> that we don’t have special symbol for <code class="verbatim">false</code> values, as empty list serves this purpose well.</p>
+<p>Everything that is not an empty list has a meaning of <code class="verbatim">true</code>. However, there is a symbol <code class="verbatim">t</code> which is the preferred way to represent the truth value <code class="verbatim">true</code>.</p>
+<p>So <code class="verbatim">nil</code> and <code class="verbatim">t</code> are considered canonical boolean values. There is a function <code class="verbatim">booleanp</code> that returns <code class="verbatim">t</code> if the argument is a canonical boolean value and <code class="verbatim">nil</code> otherwise.</p>
+<p>The fun begins when you need to check if two boolean values are equal. Since non-nil (or not an empty list) can mean many different things (like <code class="verbatim">"Emacs is
+the only true editor"</code>) you can’t just do regular equality check.</p>
+<div class="sourceCode" id="cb2" data-org-language="emacs-lisp"><pre class="sourceCode commonlisp"><code class="sourceCode commonlisp"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>(<span class="kw">equal</span> <span class="kw">t</span> <span class="st">&quot;Emacs is the only true editor&quot;</span>) <span class="co">; =&gt; nil</span></span></code></pre></div>
+<p>There are, however, several tricks to get it working. The most obvious solution is to convert value to a canonical boolean value.</p>
+
+      <p class="read-more"><a href="../posts/2018-10-14-equality-of-booleans-in-emacs.html">Read more →</a></p>
+    </div>
+  
+    <div class="recent-post">
+      <h3><a href="../posts/2018-10-07-flyspell-correct-v0.5.html">flyspell-correct v0.5</a></h3>
+      <div class="date"><span>October  7, 2018</span></div>
+      <div class="tags"><span>(<a title="All pages tagged 'emacs'." href="../tags/emacs.html">emacs</a>, <a title="All pages tagged 'release'." href="../tags/release.html">release</a>, <a title="All pages tagged 'flyspell-correct'." href="../tags/flyspell-correct.html">flyspell-correct</a>)</span></div>
+      <p><code>flyspell-correct</code> is a package for distraction-free words correction with flyspell via selected interface. It’s available on <a href="https://github.com/d12frosted/flyspell-correct">GitHub</a> and <a href="http://melpa.org/#/flyspell-correct">MELPA</a>.</p>
+<p>Recently, there was a major release of <code>flyspell-correct</code>. Version 0.5 introduces rapid mode for fixing multiple words in one run, breaking renames and tests. Read further for the complete change list.</p>
+
+      <p class="read-more"><a href="../posts/2018-10-07-flyspell-correct-v0.5.html">Read more →</a></p>
+    </div>
+  
+    <div class="recent-post">
+      <h3><a href="../posts/2017-07-30-block-templates-in-org-mode.html">Structure templates in Org mode</a></h3>
+      <div class="date"><span>July 30, 2017</span></div>
+      <div class="tags"><span>(<a title="All pages tagged 'emacs'." href="../tags/emacs.html">emacs</a>, <a title="All pages tagged 'org-mode'." href="../tags/org-mode.html">org-mode</a>)</span></div>
+      <p>Anyone would agree that typing <code class="verbatim">#+BEGIN_SRC ... #+END_SRC</code> blocks manually feels <strong>strange</strong>.</p>
+<p>In order to make life easier, some people implement helpers to insert these blocks. For example, Chris Done has <code class="verbatim">org-begin-template</code> function in his <a href="https://github.com/chrisdone/chrisdone-emacs/blob/master/config/org.el#L30">configs</a>. Other people use <a href="https://github.com/mineo/yatemplate">yatemplate</a> to create generic or specific templates for blocks.</p>
+<p>But what is most fascinating, is that <code class="verbatim">org-mode</code> bundles with templates for some structural elements like these blocks. And instead of copy-pasting solutions into your <code class="verbatim">.emacs</code> file, take a look at <a href="https://orgmode.org/org.html#Structure-Templates">Structure Templates</a>.</p>
+
+      <p class="read-more"><a href="../posts/2017-07-30-block-templates-in-org-mode.html">Read more →</a></p>
+    </div>
+  
+    <div class="recent-post">
+      <h3><a href="../posts/2016-12-20-Being-an-org-mode-addict.html">Being an org-mode addict</a></h3>
+      <div class="date"><span>December 20, 2016</span></div>
+      <div class="tags"><span>(<a title="All pages tagged 'emacs'." href="../tags/emacs.html">emacs</a>, <a title="All pages tagged 'org-mode'." href="../tags/org-mode.html">org-mode</a>)</span></div>
+      <div class="post-image post-image-half">
+<img src="../images/59ca88ab-671f-4c5e-9bf8-25547bbadbc2.png" />
+</div>
+
+<p>It is funny how I vainly try to escape devilish <code>org-mode</code>. I have several major concerns regarding it as a GTD system and a note taking system, but after all, whatever I try to replace it with, I always return to <code>org-mode</code>. Mostly because it’s simple (at least at the top level) and makes me feel more confident about my thoughts, tasks and the future. But on the other hand, it makes me really angry because it forces me to make some uncomfortable decisions.</p>
+
+      <p class="read-more"><a href="../posts/2016-12-20-Being-an-org-mode-addict.html">Read more →</a></p>
+    </div>
+  
+    <div class="recent-post">
+      <h3><a href="../posts/2016-06-24-Spacemacs-and-different-emacs-versions.html">Using Spacemacs with several Emacs versions</a></h3>
+      <div class="date"><span>June 24, 2016</span></div>
+      <div class="tags"><span>(<a title="All pages tagged 'emacs'." href="../tags/emacs.html">emacs</a>, <a title="All pages tagged 'spacemacs'." href="../tags/spacemacs.html">spacemacs</a>)</span></div>
+      <p>Since Spacemacs officially supports at least two major versions of Emacs, as a collaborator I have to switch between Emacs versions time to time. And since installed packages don’t usually work between different major version of Emacs, I came up with a hack allowing me to seamlessly switch Emacs versions.</p>
+
+      <p class="read-more"><a href="../posts/2016-06-24-Spacemacs-and-different-emacs-versions.html">Read more →</a></p>
+    </div>
+  
+    <div class="recent-post">
+      <h3><a href="../posts/2016-06-22-flyspell-correct-0.1.html">flyspell-correct v0.1</a></h3>
+      <div class="date"><span>June 22, 2016</span></div>
+      <div class="tags"><span>(<a title="All pages tagged 'emacs'." href="../tags/emacs.html">emacs</a>, <a title="All pages tagged 'release'." href="../tags/release.html">release</a>, <a title="All pages tagged 'flyspell-correct'." href="../tags/flyspell-correct.html">flyspell-correct</a>)</span></div>
+      <p><code>flyspell-correct</code> is a package for distraction-free words correction with flyspell via selected interface. It’s available on <a href="https://github.com/d12frosted/flyspell-correct">GitHub</a> and <a href="http://melpa.org/#/flyspell-correct">MELPA</a>.</p>
+<p>Not long ago I have released the first version of <code>flyspell-correct</code>. There are several interesting changes compared to initial implementation. First of all, I divided this package into four different packages - core and interfaces. This allowed me to properly setup dependencies and also solved some problems with <code class="verbatim">helm</code> interface. Second important change - I’ve added a function called <code>flyspell-correct-previous-word-generic</code>, which is useful when the misspelled word is not under point, but long behind it. Right now I realise that it doesn’t work as perfect as I want, so I’ll improve it in the next release.</p>
+<p>You can find more information about <code>flyspell-correct</code> on <a href="https://github.com/d12frosted/flyspell-correct">GitHub</a>.</p>
+
+      <p class="read-more"><a href="../posts/2016-06-22-flyspell-correct-0.1.html">Read more →</a></p>
+    </div>
+  
+    <div class="recent-post">
+      <h3><a href="../posts/2016-05-10-emacs-and-composability.html">Emacs and Composability</a></h3>
+      <div class="date"><span>May 10, 2016</span></div>
+      <div class="tags"><span>(<a title="All pages tagged 'emacs'." href="../tags/emacs.html">emacs</a>)</span></div>
+      <p>It’s not a secret that I enjoy using Emacs. And people often ask me why it’s Emacs and not Vi(m). The top issue for me is the modal editing thing. Somehow I just don’t get it. I understand that some people are able to fully utilize this feature, but I can’t say that about myself. In any case, recently I was reading an <a href="http://irreal.org/blog/?p=5237">article on Irreal</a> about Vim being not that hard to learn compared to Emacs and found a link to another interesting <a href="https://medium.com/@mkozlows/why-atom-cant-replace-vim-433852f4b4d1#.rqcouk4l1">article about composability of Vim</a>.</p>
+<p>I totally agree that composability is a great feature that unfortunately wasn’t widely adopted. It’s very powerful in use and great in terms of learnability and consistency. Just as Mike Kozlowski has stated. I don’t want to repeat his article, instead just go ahead and read it.</p>
+<p>What I want to do is to defend Emacs (and some other editors). I really think that it was very smart move to place the stake on the ability to extend the editor. And Emacs is a great example of such editor. Just take a look at <code>evil</code>. Whenever I think about it, I am amazed. It doesn’t mean that I want to use it, it just shows that extensibility matters and its limits are very loose.</p>
+<p>Let’s return to composability in Emacs. One might argue that Emacs comes with built-in composability, but let’s be honest even if it’s not true - it’s still <a href="https://github.com/paldepind/composable.el">easy to implement</a> vim-like composability even in Emacs. It’s just a matter of effort.</p>
+<p>To follow Mike Kozlowski’s trend, I admit that Emacs is not perfect. Some people don’t like Emacs Lisp, and out-of-box experience is far from being ideal. In order to perfect Emacs The Editor you have to invest a lot of time in writing configurations. You also have to use dozens of third-party packages and also configure them appropriately. But it gives you freedom. And in case you don’t like writing configs, just take a look at these great projects - <a href="https://github.com/purcell/emacs.d">Purcell’s emacs.d</a>, <a href="https://github.com/bbatsov/prelude">Prelude</a> and of course, <a href="https://github.com/syl20bnr/spacemacs">Spacemacs.</a> You have plenty of options. And composability is one of them.</p>
+
+      <p class="read-more"><a href="../posts/2016-05-10-emacs-and-composability.html">Read more →</a></p>
+    </div>
+  
+    <div class="recent-post">
+      <h3><a href="../posts/2016-05-09-flyspell-correct-intro.html">flyspell-correct</a></h3>
+      <div class="date"><span>May  9, 2016</span></div>
+      <div class="tags"><span>(<a title="All pages tagged 'emacs'." href="../tags/emacs.html">emacs</a>, <a title="All pages tagged 'release'." href="../tags/release.html">release</a>, <a title="All pages tagged 'flyspell-correct'." href="../tags/flyspell-correct.html">flyspell-correct</a>)</span></div>
+      <p><code>flyspell-correct</code> is a package for distraction-free words correction with flyspell via selected interface. It’s available on <a href="https://github.com/d12frosted/flyspell-correct">GitHub</a> and <a href="http://melpa.org/#/flyspell-correct">MELPA</a>.</p>
+<p>It’s very common to make mistakes while writing notes, comments or whatever. And a desire to have spell checking software is natural. In <a href="http://www.gnu.org/software/emacs/index.html">Emacs</a>, we usually use <a href="https://www.emacswiki.org/emacs/FlySpell">Flyspell</a> for that purpose. It’s a great piece of software, but sometimes it lacks better interface for correcting words. Especially since there are completion packages like <a href="https://github.com/auto-complete/popup-el">popup.el</a>, <a href="https://github.com/emacs-helm/helm">helm</a>, <a href="https://github.com/abo-abo/swiper">ivy</a> etc. There are already available separate packages for correcting words via <code>popup.el</code> (<a href="https://www.emacswiki.org/emacs/FlySpell#toc11">wiki</a>, <a href="https://github.com/xuchunyang/flyspell-popup">flyspell-popup</a>) and <code>helm</code> (<a href="https://github.com/pronobis/helm-flyspell">helm-flyspell</a>). Since recently I have switched from <code>helm</code> to <code>ivy</code>, I’ve found a lack of similar package for <code>ivy</code>, so I decided to write my own.</p>
+<p>But available packages are all the same, except the part that calls completion front-end, so my goal was to provide a generic package allowing usage of any interface. Either from the predefined set (<code>ivy</code>, <code>helm</code>, <code>popup</code> or <code>dummy</code>) or any user-defined.</p>
+<p>This is an introduction post, for more up-to-date documentation, please refer to <a href="https://github.com/d12frosted/flyspell-correct">README</a> file.</p>
+
+      <p class="read-more"><a href="../posts/2016-05-09-flyspell-correct-intro.html">Read more →</a></p>
+    </div>
+  
+</section>
+
+  </body>
+</html>
